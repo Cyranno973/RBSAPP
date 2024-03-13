@@ -1,0 +1,7 @@
+{
+  "name": "RBSAPP",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
