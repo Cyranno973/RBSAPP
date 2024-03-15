@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+     Télégarger les vidéos de vos reunions
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,73 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="large">Télégarger les vidéos de vos reunions</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <button (click)="download()"> services</button>
+  <br>
+  <button (click)="authen()"> auth</button>
+  <br>
+  <br>
+  <br>
+
+<!--  <ion-item>-->
+<!--    <ion-label>Date de début</ion-label>-->
+<!--    <ion-button (click)="openStartDate()">Choisir</ion-button>-->
+<!--  </ion-item>-->
+
+  <ion-datetime [showDefaultButtons]="false"
+                #datetime
+                displayFormat="DD MMM YYYY"
+                [(ngModel)]="startDate"
+                (ionChange)="onDateChange($event)"
+                doneText="Valider" cancelText="Annuler">
+    <ion-buttons slot="buttons">
+      <ion-button color="danger" (click)="cancelStartDate()">Reset</ion-button>
+        <ion-button color="primary" (click)="confirmStartDate(datetime.value)">validerrrr</ion-button>
+    </ion-buttons>
+  </ion-datetime>
+
+  <div>
+    <label for="userInput">Entrez quelque chose :</label>
+    <input id="userInput" type="text" [(ngModel)]="userInput">
+  </div>
+  <div>
+    Vous avez entré : {{ userInput }}
+  </div>
+<!--  <ion-item>-->
+<!--    <ion-label>Date de fin</ion-label>-->
+<!--    <ion-button (click)="openEndDate()">Choisir</ion-button>-->
+<!--  </ion-item>-->
+<!--  <ion-datetime *ngIf="showEndDate" displayFormat="DD MMM YYYY" [(ngModel)]="endDate">-->
+<!--    <ion-buttons slot="buttons">-->
+<!--      <ion-button (click)="confirmEndDate()">Valider</ion-button>-->
+<!--      <ion-button color="medium" (click)="cancelEndDate()">Annuler</ion-button>-->
+<!--    </ion-buttons>-->
+<!--  </ion-datetime>-->
+
+
+  <br>
+  <br>
+  <br>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Card Title</ion-card-title>
+      <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let meeting of meetings">
+          <ion-thumbnail slot="start">
+            <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
+          </ion-thumbnail>
+          <ion-label>{{meeting.firstName}}</ion-label>
+          <ion-label>{{meeting.subject}}</ion-label>
+          <ion-label>{{meeting.startTime}}</ion-label>
+          <button (click)="record(meeting.recording.downloadUrl)">télécharger</button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
