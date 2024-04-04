@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-     Télégarger les vidéos de vos reunions
+      Télégarger les vidéos de vos reunions
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,62 +13,43 @@
     </ion-toolbar>
   </ion-header>
 
-  <button (click)="download()"> services</button>
+  <ion-button  (click)="authen()"> auth</ion-button>
   <br>
-  <button (click)="authen()"> auth</button>
+  <ion-button [disabled]="!searchHistory.startDate" (click)="download()"> services</ion-button>
   <br>
   <br>
   <br>
 
-<!--  <ion-item>-->
-<!--    <ion-label>Date de début</ion-label>-->
-<!--    <ion-button (click)="openStartDate()">Choisir</ion-button>-->
-<!--  </ion-item>-->
+  <ion-item style="max-width: 80px; margin: 0 auto">
+    <ion-button slot="start"  (click)="showDate = !showDate">Date</ion-button>
+  </ion-item>
 
-  <ion-datetime [showDefaultButtons]="false"
-                #datetime
-                displayFormat="DD MMM YYYY"
-                [(ngModel)]="startDate"
-                (ionChange)="onDateChange($event)"
-                doneText="Valider" cancelText="Annuler">
-    <ion-buttons slot="buttons">
-      <ion-button color="danger" (click)="cancelStartDate()">Reset</ion-button>
-        <ion-button color="primary" (click)="confirmStartDate(datetime.value)">validerrrr</ion-button>
-    </ion-buttons>
-  </ion-datetime>
+  <div  style="margin: 0 auto; display: flex">
+    <ion-datetime style="margin: 0 auto;" *ngIf="showDate" #datetime
+                  [showDefaultTitle]="true" firstDayOfWeek="1" [max]="maxDate">
+      <span slot="title">Sélectionner la date de début</span>
+      <ion-buttons slot="buttons">
+        <ion-button color="danger" (click)="reset()">Reset</ion-button>
+        <ion-button color="primary" (click)="cancel()">Cancel</ion-button>
+        <ion-button color="primary" (click)="confirm()">Valider</ion-button>
+      </ion-buttons>
+    </ion-datetime>
 
-  <div>
-    <label for="userInput">Entrez quelque chose :</label>
-    <input id="userInput" type="text" [(ngModel)]="userInput">
   </div>
-  <div>
-    Vous avez entré : {{ userInput }}
-  </div>
-<!--  <ion-item>-->
-<!--    <ion-label>Date de fin</ion-label>-->
-<!--    <ion-button (click)="openEndDate()">Choisir</ion-button>-->
-<!--  </ion-item>-->
-<!--  <ion-datetime *ngIf="showEndDate" displayFormat="DD MMM YYYY" [(ngModel)]="endDate">-->
-<!--    <ion-buttons slot="buttons">-->
-<!--      <ion-button (click)="confirmEndDate()">Valider</ion-button>-->
-<!--      <ion-button color="medium" (click)="cancelEndDate()">Annuler</ion-button>-->
-<!--    </ion-buttons>-->
-<!--  </ion-datetime>-->
-
 
   <br>
   <br>
   <br>
-  <ion-card>
+  <ion-card *ngIf="meetings?.length" style="margin : 5px" >
     <ion-card-header>
-      <ion-card-title>Card Title</ion-card-title>
+      <ion-card-title>Listes des enregistrements</ion-card-title>
       <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
       <ion-list>
         <ion-item *ngFor="let meeting of meetings">
           <ion-thumbnail slot="start">
-            <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" />
+            <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg"/>
           </ion-thumbnail>
           <ion-label>{{meeting.firstName}}</ion-label>
           <ion-label>{{meeting.subject}}</ion-label>
@@ -79,3 +60,8 @@
     </ion-card-content>
   </ion-card>
 </ion-content>
+
+<ion-button (click)="getmeetingById()">getmmeting</ion-button>
+<ion-button (click)="getMe()">getMe</ion-button>
+<ion-button (click)="getUserInfo()">getUserInfo</ion-button>
+<ion-button (click)="getMeetingByOrganizer()">getMeetingByOrganizer</ion-button>

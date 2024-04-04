@@ -10,8 +10,8 @@ export class TestComponent {
   selectedDate!: string;
   @ViewChild(IonDatetime, { static: false }) datetimeEl!: IonDatetime;
   constructor() { }
-  confirm() {
-    this.datetimeEl.confirm();
+  async confirm() {
+    await this.datetimeEl.confirm();
     console.log(this.datetimeEl.value);
   }
 

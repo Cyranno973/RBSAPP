@@ -1,0 +1,23 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <ion-item>
+    <ion-label position="stacked">Email</ion-label>
+    <ion-input autocomplete="on" type="email" aria-label="email" formControlName="email" name="email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Password</ion-label>
+    <ion-input type="password" aria-label="password" formControlName="password" name="password" ></ion-input>
+  </ion-item>
+  <ion-item  *ngIf="form.controls['confirmPassword']">
+    <ion-label position="stacked">confirmPassword</ion-label>
+    <ion-input type="password" aria-label="confirmPassword" formControlName="confirmPassword" name="confirmPassword" ></ion-input>
+  </ion-item>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched">
+    Les mots de passe ne correspondent pas.
+  </div>
+
+  <ion-button expand="block" type="submit" [disabled]="!form.valid">{{form.controls['confirmPassword'] ? "Connexion" : "Login"}}</ion-button>
+</form>

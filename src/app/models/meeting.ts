@@ -3,7 +3,11 @@ export enum MeetingType {
   recurring = 'recurring',
   scheduled = 'scheduled',
 }
-
+export interface SearchHistory {
+  endDate?: string,
+  startDate?: string
+  id?: string
+}
 export interface Recording {
   recordingName: string,
   recordingId: string,

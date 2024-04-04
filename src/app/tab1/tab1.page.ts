@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {GoToMeetingService} from "../services/go-to-meeting.service";
 import {ActivatedRoute} from "@angular/router";
-import {Meeting} from "../models/meeting";
+import {Meeting, SearchHistory} from "../models/meeting";
 import {filter, map} from "rxjs";
+import {IonDatetime} from "@ionic/angular";
 
 @Component({
   selector: 'app-tab1',
@@ -10,28 +11,32 @@ import {filter, map} from "rxjs";
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit {
-meetings!: Meeting[];
+  meetings!: Meeting[];
   startDate!: string;
   endDate!: string;
-  showStartDate = false;
+  showDate = false;
   showEndDate = false;
-  auth:boolean = false;
-  title = 'ngModelTest';
-  userInput: string = 'aa';
+  auth: boolean = false;
+  @ViewChild(IonDatetime, {static: false}) datetimeEl!: IonDatetime;
+  maxDate: string = new Date().toISOString().split('T')[0];
+  selectedDate: any;
+  selecting: 'start' | 'end' = 'start';
+  searchHistory: SearchHistory = {};
+  id: string ='7972725270140104878';
+
+
   constructor(private goToMeetingService: GoToMeetingService, private route: ActivatedRoute) {
   }
 
   download() {
-    const proxyUrl = 'http://localhost:3000/api/authenticate';
-    window.location.href = proxyUrl;
-  this.goToMeetingService.getHistoricalMeetings().pipe(map(v => v.filter(v => v.recording))).subscribe(v => {
-    console.log(v);
-this.meetings = v;
-  })
+    this.goToMeetingService.getHistoricalMeetings(this.searchHistory).pipe(map(v => v.filter(v => v.recording))).subscribe(v => {
+      console.log(v);
+      this.meetings = v;
+    })
   }
 
   authen() {
-    const proxyUrl = 'http://localhost:3000/api/authenticate';
+    const proxyUrl = 'http://localhost:3000/api/auth/authenticate';
     window.location.href = proxyUrl;
   }
 
@@ -41,7 +46,7 @@ this.meetings = v;
       const accessToken = params['access_token'];
       if (accessToken) {
         console.log('Token d\'accès récupéré :', accessToken);
-  return
+        return
       }
     });
 
@@ -50,37 +55,54 @@ this.meetings = v;
   record(downloadUrl: string) {
     window.open(downloadUrl, '_blank');
   }
-  openStartDate() {
-    this.showStartDate = true;
-  }
-  onDateChange(event: any) {
-    console.log(event);
-    this.startDate = event.detail.value;
-  }
-  confirmStartDate(value: any) {
-    this.startDate = value; // Met à jour la valeur de startDate avec la valeur sélectionnée
-    this.showStartDate = false; // Cache le sélecteur de date
-    console.log('Date de début confirmée:', this.startDate);
+
+
+  async confirm() {
+    await this.datetimeEl.confirm();
+    console.log(this.datetimeEl.value);
+    this.showDate = false;
+    if(this.datetimeEl.value) this.searchHistory.startDate =  this.datetimeEl.value as string
+    this.searchHistory.id = this.id;
   }
 
-  cancelStartDate() {
-    this.showStartDate = false;
-    console.log('annullerr')
-    // Optionnel : réinitialiser la sélection de la date de début si nécessaire
+  cancel() {
+    this.showDate = false;
   }
 
-  openEndDate() {
-    this.showEndDate = true;
+  reset() {
+    this.datetimeEl.reset().then(() => this.showDate = false);
   }
 
-  confirmEndDate() {
-    this.showEndDate = false;
-    // Logique supplémentaire pour traiter la date de fin sélectionnée
-    console.log('Date de fin confirmée:', this.endDate);
+  onChanged(a: string) {
+    console.log('aaa')
+    new this.datetimeEl.ionChange(true)
+  }
+  getmeetingById(){
+    // this.goToMeetingService.getMeeting('144418421').subscribe(v => console.log(v))
+    this.goToMeetingService.getMeeting('547203517').subscribe(v => console.log(v))
+  }
+  async getMeetingByOrganizer(){
+    console.log("aaaaaa",this.searchHistory.startDate);
+    if (!this.searchHistory.startDate) {return}
+    const startDateISO = new Date(this.searchHistory.startDate as string).toISOString();
+    this.goToMeetingService.getMeetingByOrganizer({...this.searchHistory, startDate: startDateISO, id: this.id, endDate: '2024-03-01T23:00:00Z'}).subscribe(v => console.log(v));
   }
 
-  cancelEndDate() {
-    this.showEndDate = false;
-    // Optionnel : réinitialiser la sélection de la date de fin si nécessaire
+  getMe(){
+    this.goToMeetingService.getMe().subscribe(v => console.log(v))
+  }
+  getUserInfo(){
+    this.goToMeetingService.getMe().subscribe(v => console.log(v))
+  }
+
+  dateChanged(event: any) {
+    const selectedDate = event.detail.value;
+    if (this.selecting === 'start') {
+      this.startDate = selectedDate;
+      console.log('Date de début sélectionnée:', this.startDate);
+    } else {
+      this.endDate = selectedDate;
+      console.log('Date de fin sélectionnée:', this.endDate);
+    }
   }
 }

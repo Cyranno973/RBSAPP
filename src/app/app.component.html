@@ -1,3 +1,24 @@
 <ion-app>
-  <app-test></app-test>
+<!--  <app-login></app-login>-->
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>RBSAPP</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button routerLink="inscription"> Inscription </ion-button>
+    </ion-buttons>
+<!--    <ion-title>Start / End Buttons</ion-title>-->
+    <ion-buttons slot="end">
+      <ion-button routerLink="connexion"> Connexion </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="isLoggedIn$ | async" (click)="logout()"> Déconnexion </ion-button>
+<!--      <ion-button  (click)="logout()"> Déconnexion </ion-button>-->
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-content>
+    <router-outlet></router-outlet>
+  </ion-content>
 </ion-app>

@@ -1,0 +1,6 @@
+<app-auth-form-component (formSend)="onLogin($event)" [errorMessage]="errorMessage" [form]="formLogin"></app-auth-form-component>
+<form (submit)="sendResetPasswordEmail()">
+  <ion-input type="email" [(ngModel)]="userEmail" name="email" placeholder="Enter your email"></ion-input>
+  <ion-button type="submit">Send Reset Password Email</ion-button>
+</form>
+
