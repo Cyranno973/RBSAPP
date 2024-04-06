@@ -12,23 +12,24 @@ export class GoToMeetingService {
   constructor(private http: HttpClient) {
   }
 
-  getHistoricalMeetings(search: SearchHistory): Observable<Meeting[]> {
+  getHistoricalMeetings(search: SearchHistory, uid: string): Observable<Meeting[]> {
     console.log(search);
-    return this.http.post<Meeting[]>('http://localhost:3000/getHistoricalMeetings', {startDate: search.startDate, endDate: search.endDate})
+    return this.http.post<Meeting[]>('http://localhost:3000/api/meetings/historicalMeetings', {search, uid})
   }
-  getMeetingByOrganizer(search: SearchHistory): Observable<Meeting[]> {
+  getMeetingByOrganizer(search: SearchHistory, uid: string): Observable<Meeting[]> {
     console.log(search);
-    return this.http.post<Meeting[]>(`http://localhost:3000/getMeetingByOrganizer`, search)
+    console.log(uid);
+    return this.http.post<Meeting[]>(`http://localhost:3000/api/meetings/meetingByOrganizer`, {search, uid})
   }
 
-  getMeeting(id: string): Observable<Meeting> {
-    return this.http.get<Meeting>(`http://localhost:3000/getMeeting/${id}`);
+  getMeeting(uid: string, id: string): Observable<Meeting> {
+    return this.http.get<Meeting>(`http://localhost:3000/api/meetings/meeting/${id}?uid=${uid}`);
   }
 
-  getMe(): Observable<Meeting> {
-    return this.http.get<Meeting>(`http://localhost:3000/getMe`);
+  getMe(uid: string): Observable<Meeting> {
+    return this.http.get<Meeting>(`http://localhost:3000/api/meetings/me?uid=${uid}`);
   }
-  getUserInfo(): Observable<Meeting> {
-    return this.http.get<Meeting>(`http://localhost:3000/getUserInfo`);
+  getUserInfo(uid: string): Observable<Meeting> {
+    return this.http.get<Meeting>(`http://localhost:3000/api/meetings/userInfo?uid=${uid}`);
   }
 }

@@ -17,8 +17,8 @@ errorMessage: string = '';
   constructor(private fb: FormBuilder, private userService: UserService, private auth: AuthService, private router: Router) { }
   ngOnInit() {
     this.formLogin = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
+      email: ['azaz@hotmail.com', Validators.required],
+      password: ['aaaaaa', Validators.required]
     })
   }
 

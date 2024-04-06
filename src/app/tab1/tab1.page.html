@@ -54,7 +54,7 @@
           <ion-label>{{meeting.firstName}}</ion-label>
           <ion-label>{{meeting.subject}}</ion-label>
           <ion-label>{{meeting.startTime}}</ion-label>
-          <button (click)="record(meeting.recording.downloadUrl)">télécharger</button>
+          <button *ngIf="meeting?.recording?.downloadUrl" (click)="record(meeting.recording.downloadUrl)">télécharger</button>
         </ion-item>
       </ion-list>
     </ion-card-content>
