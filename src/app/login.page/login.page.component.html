@@ -1,6 +1,16 @@
-<app-auth-form-component (formSend)="onLogin($event)" [errorMessage]="errorMessage" [form]="formLogin"></app-auth-form-component>
-<form (submit)="sendResetPasswordEmail()">
-  <ion-input type="email" [(ngModel)]="userEmail" name="email" placeholder="Enter your email"></ion-input>
-  <ion-button type="submit">Send Reset Password Email</ion-button>
-</form>
-
+<div style="padding-left: 1rem; padding-right: 1rem">
+  <div *ngIf="!afficherFormReset">
+    <app-auth-form-component   (formSend)="onLogin($event)" [errorMessage]="errorMessage" [form]="formLogin"></app-auth-form-component>
+    <br>
+    <ion-text color="primary" (click)="afficherFormReset = !afficherFormReset">Adresse e-mail oubliée ?</ion-text>
+  </div>
+  <p>
+  <form [formGroup]="formEmailOublier" style="text-align: center" *ngIf="afficherFormReset" (submit)="sendResetPasswordEmail()">
+    <ion-input formControlName="email" shape="solid"  type="email" [(ngModel)]="userEmail" name="email" placeholder="Entrez votre adresse email"></ion-input>
+  <br>
+  <ion-button [disabled]="formEmailOublier.invalid" type="submit">Envoyer l'e-mail de réinitialisation du mot de passe</ion-button>
+  <br>
+  <br>
+  <ion-button color="warning" (click)="afficherFormReset= !afficherFormReset">Annuler</ion-button>
+  </form>
+</div>

@@ -9,24 +9,24 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
+<!--      <ion-button slot="end">Retour</ion-button>-->
       <ion-title size="large">Télégarger les vidéos de vos reunions</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-button  (click)="authen()"> auth</ion-button>
-  <br>
-  <ion-button [disabled]="!searchHistory.startDate" (click)="download()"> services</ion-button>
   <br>
   <br>
   <br>
-
-  <ion-item style="max-width: 80px; margin: 0 auto">
-    <ion-button slot="start"  (click)="showDate = !showDate">Date</ion-button>
-  </ion-item>
 
   <div  style="margin: 0 auto; display: flex">
-    <ion-datetime style="margin: 0 auto;" *ngIf="showDate" #datetime
-                  [showDefaultTitle]="true" firstDayOfWeek="1" [max]="maxDate">
+    <ion-datetime prefer-wheel="true"
+                  presentation="month-year"
+                  style="margin: 0 auto;"
+                  #datetime
+                  [showDefaultTitle]="true"
+                  firstDayOfWeek="1"
+                  [max]="maxDate"
+    >
       <span slot="title">Sélectionner la date de début</span>
       <ion-buttons slot="buttons">
         <ion-button color="danger" (click)="reset()">Reset</ion-button>
@@ -40,28 +40,35 @@
   <br>
   <br>
   <br>
-  <ion-card *ngIf="meetings?.length" style="margin : 5px" >
+  <ion-card *ngIf="meetings?.length" style="margin: 5px">
     <ion-card-header>
       <ion-card-title>Listes des enregistrements</ion-card-title>
       <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let meeting of meetings">
-          <ion-thumbnail slot="start">
-            <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/thumbnail.svg"/>
-          </ion-thumbnail>
-          <ion-label>{{meeting.firstName}}</ion-label>
-          <ion-label>{{meeting.subject}}</ion-label>
-          <ion-label>{{meeting.startTime}}</ion-label>
-          <button *ngIf="meeting?.recording?.downloadUrl" (click)="record(meeting.recording.downloadUrl)">télécharger</button>
-        </ion-item>
-      </ion-list>
+      <ion-grid>
+        <ion-row class="row-border" *ngFor="let meeting of meetings">
+          <ion-col size="12" size-md="3">
+<!--            <ion-thumbnail slot="start">-->
+              <ion-img style="width: 10%;" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" alt="Silhouette of mountains"/>
+<!--            </ion-thumbnail>-->
+          </ion-col>
+          <ion-col size="12" size-md="3">
+            <ion-label>{{meeting.subject}}</ion-label>
+          </ion-col>
+          <ion-col size="12" size-md="3">
+            <ion-label>{{meeting.startTime | date: 'fullDate' : '' : 'fr-FR' }}</ion-label>
+          </ion-col>
+          <ion-col size="12" size-md="3">
+            <ion-button *ngIf="meeting?.recording?.downloadUrl" (click)="record(meeting.recording.downloadUrl)">Télécharger</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card-content>
   </ion-card>
+
 </ion-content>
 
-<ion-button (click)="getmeetingById()">getmmeting</ion-button>
-<ion-button (click)="getMe()">getMe</ion-button>
-<ion-button (click)="getUserInfo()">getUserInfo</ion-button>
-<ion-button (click)="getMeetingByOrganizer()">getMeetingByOrganizer</ion-button>
+<!--<ion-button (click)="getmeetingById()">getmmeting</ion-button>-->
+<!--<ion-button (click)="getMe()">getMe</ion-button>-->
+<!--<ion-button (click)="getUserInfo()">getUserInfo</ion-button>-->

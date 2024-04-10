@@ -12,6 +12,8 @@ import {Router} from "@angular/router";
 export class LoginPage implements OnInit {
 
 formLogin!: FormGroup;
+formEmailOublier!: FormGroup;
+  afficherFormReset: boolean = false;
 errorMessage: string = '';
   userEmail: string = '';
   constructor(private fb: FormBuilder, private userService: UserService, private auth: AuthService, private router: Router) { }
@@ -19,6 +21,9 @@ errorMessage: string = '';
     this.formLogin = this.fb.group({
       email: ['azaz@hotmail.com', Validators.required],
       password: ['aaaaaa', Validators.required]
+    })
+    this.formEmailOublier = this.fb.group({
+      email: ['', [Validators.required, Validators.email],],
     })
   }
 

@@ -5,10 +5,11 @@ import {Tab1Page} from "./tab1/tab1.page";
 import {LoginPage} from "./login.page/login.page.component";
 import {SignUpPage} from "./sign-up/sign-up.page";
 import {canActivateAuth} from "./services/guard/auth.guard";
+import {LoginGuard} from "./services/guard/login.guard";
 
 const routes: Routes = [
   {path: '',  redirectTo: 'connexion', pathMatch: "full"},
-  {path: 'connexion', component: LoginPage},
+  {path: 'connexion', component: LoginPage,  canActivate: [LoginGuard],},
   {path: 'inscription', component: SignUpPage},
   // {path: 'inscription', component: SignUpPage},
   // {

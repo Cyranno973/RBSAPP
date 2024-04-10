@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import {AuthService} from "./services/auth.service";
+import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import {map, Observable} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -8,9 +11,20 @@ import {AuthService} from "./services/auth.service";
 })
 export class AppComponent {
 
-  isLoggedIn$ = this.authService.getCurrentUser();
+  isLoggedIn$: Observable<boolean>;
+  isMeetingPage: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.isLoggedIn$ = this.authService.getCurrentUser().pipe(
+      map(user => !!user)
+    );
+
+    this.router.events.pipe(
+      filter((event: RouterEvent): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.isMeetingPage = event.urlAfterRedirects === '/meeting';
+    });
+  }
 
   logout() {
     this.authService.signOut();

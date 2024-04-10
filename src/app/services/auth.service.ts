@@ -23,13 +23,10 @@ export class AuthService {
     });
   }
 
+
   getCurrentUser(): Observable<User | null> {
     return this.currentUser.asObservable();
   }
-  // saveTokenUser(uid: string, token: string): Promise<void> {
-  //   return this.firestore.doc(`users/${uid}`).update({ token });
-  // }
-
 
   async signUp(credentials: Credentials, defaultRole = 'user') {
     const credential = await this.afAuth.createUserWithEmailAndPassword(credentials.email, credentials.password);

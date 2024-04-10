@@ -11,9 +11,8 @@ export const canActivateAuth: (route: ActivatedRouteSnapshot, state: RouterState
     map(user => {
       console.log(user);
       return (!!user)
-    }), // Convertit l'objet user en booléen : true si l'utilisateur est connecté, false sinon
+    }),
     tap(isLoggedIn => {
-      console.log(isLoggedIn);
       if (!isLoggedIn) {
         console.log('Accès refusé - Redirection vers la page de login');
         router.navigate(['/connexion']).then(); // Redirige l'utilisateur vers la page de login s'il n'est pas connecté
