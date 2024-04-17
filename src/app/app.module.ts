@@ -18,14 +18,15 @@ import {AuthFormComponentComponent} from "./auth-form-component/auth-form-compon
 import {SignUpPage} from "./sign-up/sign-up.page";
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import {TabsPageModule} from "./tabs/tabs.module";
 
 // Enregistrer la locale française
 registerLocaleData(localeFr);
 @NgModule({
   declarations: [AppComponent, TestComponent, UserComponent, SignUpPage, LoginPage, AuthFormComponentComponent],
-  imports: [BrowserModule, AppRoutingModule, FormsModule,
-    IonicModule, IonicModule.forRoot(), HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig),
-    RouterModule, Tab1PageModule, ReactiveFormsModule],
+    imports: [BrowserModule, AppRoutingModule, FormsModule,
+        IonicModule, IonicModule.forRoot(), HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig),
+        RouterModule, Tab1PageModule, ReactiveFormsModule, TabsPageModule],
   providers: [
     // Fournir la locale française à utiliser dans l'application
     { provide: LOCALE_ID, useValue: 'fr-FR' },

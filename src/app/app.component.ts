@@ -13,6 +13,8 @@ export class AppComponent {
 
   isLoggedIn$: Observable<boolean>;
   isMeetingPage: boolean = false;
+  isLoginPage: boolean = false;
+
 
   constructor(private authService: AuthService, private router: Router) {
     this.isLoggedIn$ = this.authService.getCurrentUser().pipe(
@@ -23,6 +25,7 @@ export class AppComponent {
       filter((event: RouterEvent): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.isMeetingPage = event.urlAfterRedirects === '/meeting';
+      this.isLoginPage = event.urlAfterRedirects === '/connexion';
     });
   }
 

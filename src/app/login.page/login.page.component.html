@@ -2,7 +2,7 @@
   <div *ngIf="!afficherFormReset">
     <app-auth-form-component   (formSend)="onLogin($event)" [errorMessage]="errorMessage" [form]="formLogin"></app-auth-form-component>
     <br>
-    <ion-text color="primary" (click)="afficherFormReset = !afficherFormReset">Adresse e-mail oubliée ?</ion-text>
+    <ion-text color="primary" (click)="afficherFormReset = !afficherFormReset">Mot de passe oublié ?</ion-text>
   </div>
   <p>
   <form [formGroup]="formEmailOublier" style="text-align: center" *ngIf="afficherFormReset" (submit)="sendResetPasswordEmail()">
