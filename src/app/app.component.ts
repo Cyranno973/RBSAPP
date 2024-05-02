@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "./services/auth.service";
-import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import {Event as RouterEvent, NavigationEnd, Router} from '@angular/router';
+import {filter} from 'rxjs/operators';
 import {map, Observable} from "rxjs";
 
 @Component({
@@ -9,23 +9,20 @@ import {map, Observable} from "rxjs";
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
-  public appPages = [
-    { title: 'Inbox', url: '/folder/inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/spam', icon: 'warning' },
-  ];
+export class AppComponent implements OnInit {
   isLoggedIn$: Observable<boolean>;
+  isAdmin$: Observable<boolean>;
   isMeetingPage: boolean = false;
   isLoginPage: boolean = false;
+  isInscriptionPage: boolean = false;
 
 
   constructor(private authService: AuthService, private router: Router) {
     this.isLoggedIn$ = this.authService.getCurrentUser().pipe(
       map(user => !!user)
+    );
+    this.isAdmin$ = this.authService.getCurrentUserData().pipe(
+      map(userData => userData ? userData.roles.includes('admin') : false)
     );
 
     this.router.events.pipe(
@@ -33,10 +30,14 @@ export class AppComponent {
     ).subscribe((event: NavigationEnd) => {
       this.isMeetingPage = event.urlAfterRedirects === '/meeting';
       this.isLoginPage = event.urlAfterRedirects === '/connexion';
+      this.isInscriptionPage = event.urlAfterRedirects === '/inscription';
     });
   }
 
   logout() {
     this.authService.signOut();
+  }
+  ngOnInit(): void {
+
   }
 }

@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {GoToMeetingService} from "../services/go-to-meeting.service";
 import {ActivatedRoute} from "@angular/router";
-import {Meeting, MeetingType, SearchHistory} from "../models/meeting";
+import {Meeting, SearchHistory} from "../models/meeting";
 import {map} from "rxjs";
-import {IonDatetime} from "@ionic/angular";
+import {IonDatetime, LoadingController} from "@ionic/angular";
 import firebase from "firebase/compat";
 import {AuthService} from "../services/auth.service";
 import User = firebase.User;
@@ -28,7 +28,10 @@ export class Tab1Page implements OnInit {
   id: string = '7972725270140104878';
   user!: User | null;
 
-  constructor(private goToMeetingService: GoToMeetingService, private router: ActivatedRoute, private authService: AuthService) {
+  constructor(private goToMeetingService: GoToMeetingService, private router: ActivatedRoute,
+              private authService: AuthService, public loadingController: LoadingController,
+    private route: ActivatedRoute
+              ) {
   }
 
   download() {
@@ -39,31 +42,40 @@ export class Tab1Page implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.route.snapshot.data['title']);
+
     // Vérifiez si l'utilisateur est connecté et récupérez le token d'accès externe si présent
     this.authService.getCurrentUser().subscribe(user => {
       if (user) this.user = user;
     });
   }
-  onDatetimeFocus(): void {
-    console.log('Datetime focused!');
-  }
-  async onDatetimeChange(event: any): Promise<void> {
-   console.log('Datetime changed!', event.detail);
-    console.log('Datetime changed!', event.detail.value);
-  }
+
   record(downloadUrl: string) {
     window.open(downloadUrl, '_blank');
   }
 
   async confirm() {
+    this.loadingController.create({
+      message: 'Loading...'
+    }).then((response) => {
+      response.present();
+    });
     console.log(confirm);
     await this.datetimeEl.confirm();
     if (!this.datetimeEl.value || !this.user) {
       return;
     }
 
-    this.searchHistory.startDate = this.datetimeEl.value as string;
+    const selectedDate: Date = new Date(this.datetimeEl.value as string);
+
+    // Ajuster la date pour toujours commencer au 1er jour du mois
+    const adjustedDate: Date = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+
+    // Utiliser la date ajustée
+    this.searchHistory.startDate = adjustedDate.toISOString(); // Convertir en format ISO string
     this.searchHistory.id = this.id;
+
+    console.log(this.searchHistory.startDate);
     this.goToMeetingService.getHistoricalMeetings(this.searchHistory, this.user?.uid)
       .pipe(
         map(meetings => meetings.filter(meeting => meeting.recording)),
@@ -77,6 +89,11 @@ export class Tab1Page implements OnInit {
         console.log(meetings);
         // Assurez-vous que meetings est correctement typé pour accepter startTime comme une chaîne
         this.meetings = meetings;
+        this.loadingController.dismiss().then((response) => {
+          console.log('Loader closed!', response);
+        }).catch((err) => {
+          console.log('Error occured : ', err);
+        });
       });
   }
 
@@ -87,33 +104,6 @@ export class Tab1Page implements OnInit {
 
   cancel() {
     this.showDate = false;
-    this.meetings = [
-      {
-        startTime: "2024-04-10T18:24:05.+0000",
-        endTime: "2024-04-10T19:37:03.+0000",
-        lastName: "RhemaBethShalom",
-        duration: "72",
-        numAttendees: "14",
-        accountKey: "8251427265828452588",
-        email: "rhemabethshalom+res@gmail.com",
-        sessionId: "6554670837735703856",
-        subject: "Ministères Évangéliques RHEMA",
-        locale: "fr_FR",
-        organizerKey: "7972725270140104878",
-        meetingId: "144418421",
-        meetingType: MeetingType.recurring,
-        firstName: "RBS",
-        conferenceCallInfo: "PRIVATE",
-        recording: {
-          recordingName: "Ministères Évangéliques RHEMA-202404101832",
-          recordingId: "4127a77d-3c5d-4ae9-bdab-8215e9ef48ff",
-          downloadUrl: "https://example.com/recording.mp4",
-          fileSize: 1315624774,
-          shareUrl: "https://example.com/shareUrl",
-        },
-      },
-      // Ajoutez ici le deuxième objet Meeting
-    ];
   }
 
   reset() {

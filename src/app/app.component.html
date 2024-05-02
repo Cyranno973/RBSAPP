@@ -1,105 +1,42 @@
-<!--<ion-app>-->
-<!--  <ion-split-pane contentId="main-content">-->
-<!--    <ion-menu contentId="main-content" type="overlay">-->
-<!--      <ion-content>-->
-<!--        <ion-list id="inbox-list">-->
-<!--          <ion-list-header>Inbox</ion-list-header>-->
-<!--          <ion-note>hi&#64;ionicframework.com</ion-note>-->
-
-<!--          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">-->
-<!--            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">-->
-<!--              <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>-->
-<!--              <ion-label>{{ p.title }}</ion-label>-->
-<!--            </ion-item>-->
-<!--          </ion-menu-toggle>-->
-<!--        </ion-list>-->
-<!--      </ion-content>-->
-<!--    </ion-menu>-->
-<!--&lt;!&ndash;      <div class="ion-page">&ndash;&gt;-->
-<!--&lt;!&ndash;        <ion-header>&ndash;&gt;-->
-<!--&lt;!&ndash;          &lt;!&ndash;    <ion-toolbar>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;          <ion-title>Menu</ion-title>&ndash;&gt;-->
-<!--&lt;!&ndash;          <ion-buttons slot="start">&ndash;&gt;-->
-<!--&lt;!&ndash;            <ion-menu-button></ion-menu-button>&ndash;&gt;-->
-<!--&lt;!&ndash;          </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;          &lt;!&ndash;    </ion-toolbar>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;          <ion-toolbar>&ndash;&gt;-->
-<!--&lt;!&ndash;            <ion-buttons slot="end">&ndash;&gt;-->
-<!--&lt;!&ndash;              <ion-button routerLink="inscription">Inscription</ion-button>&ndash;&gt;-->
-<!--&lt;!&ndash;            </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;            <ion-buttons slot="end">&ndash;&gt;-->
-<!--&lt;!&ndash;              &lt;!&ndash; Affiche le bouton Meeting si l'utilisateur est connecté et n'est pas sur la page Meeting &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;              <ion-button *ngIf="(isLoggedIn$ | async) && !isMeetingPage" routerLink="/meeting">Meeting</ion-button>&ndash;&gt;-->
-
-<!--&lt;!&ndash;            </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;            <ion-buttons slot="end">&ndash;&gt;-->
-<!--&lt;!&ndash;              &lt;!&ndash; Affiche le bouton Connexion si l'utilisateur n'est pas connecté &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;              <ion-button routerLink="connexion" *ngIf="!(isLoggedIn$ | async) && !isLoginPage">Connexion</ion-button>&ndash;&gt;-->
-
-<!--&lt;!&ndash;            </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;            <ion-buttons slot="end">&ndash;&gt;-->
-<!--&lt;!&ndash;              &lt;!&ndash; Affiche le bouton Déconnexion si l'utilisateur est connecté &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;              <ion-button *ngIf="isLoggedIn$ | async" (click)="logout()">Déconnexion</ion-button>&ndash;&gt;-->
-<!--&lt;!&ndash;            </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;          </ion-toolbar>&ndash;&gt;-->
-<!--&lt;!&ndash;        </ion-header>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-
-<!--    <ion-router-outlet id="main-content"></ion-router-outlet>-->
-<!--  </ion-split-pane>-->
-<!--</ion-app>-->
-
-<!--&lt;!&ndash;<ion-toolbar>&ndash;&gt;-->
-<!--&lt;!&ndash;  <ion-buttons slot="end">&ndash;&gt;-->
-<!--&lt;!&ndash;    <ion-button routerLink="inscription">Inscription</ion-button>&ndash;&gt;-->
-<!--&lt;!&ndash;  </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;  <ion-buttons slot="end">&ndash;&gt;-->
-<!--&lt;!&ndash;    &lt;!&ndash; Affiche le bouton Meeting si l'utilisateur est connecté et n'est pas sur la page Meeting &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    <ion-button *ngIf="(isLoggedIn$ | async) && !isMeetingPage" routerLink="/meeting">Meeting</ion-button>&ndash;&gt;-->
-
-<!--&lt;!&ndash;  </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;  <ion-buttons slot="end">&ndash;&gt;-->
-<!--&lt;!&ndash;    &lt;!&ndash; Affiche le bouton Connexion si l'utilisateur n'est pas connecté &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    <ion-button routerLink="connexion" *ngIf="!(isLoggedIn$ | async) && !isLoginPage">Connexion</ion-button>&ndash;&gt;-->
-
-<!--&lt;!&ndash;  </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;  <ion-buttons slot="end">&ndash;&gt;-->
-<!--&lt;!&ndash;    &lt;!&ndash; Affiche le bouton Déconnexion si l'utilisateur est connecté &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    <ion-button *ngIf="isLoggedIn$ | async" (click)="logout()">Déconnexion</ion-button>&ndash;&gt;-->
-<!--&lt;!&ndash;  </ion-buttons>&ndash;&gt;-->
-<!--&lt;!&ndash;</ion-toolbar>&ndash;&gt;-->
-
-<!--&lt;!&ndash;  <router-outlet></router-outlet>&ndash;&gt;-->
-<!--&lt;!&ndash;<app-tabs></app-tabs>&ndash;&gt;-->
-
-<!--<ion-split-pane when="xs" contentId="main">-->
-<!--  <ion-menu contentId="main">-->
-<!--    <ion-header>-->
-<!--      <ion-toolbar color="tertiary">-->
-<!--        <ion-title>Menu</ion-title>-->
-<!--      </ion-toolbar>-->
-<!--    </ion-header>-->
-<!--    <ion-content class="ion-padding"> Menu Content </ion-content>-->
-<!--  </ion-menu>-->
-
-<!--  <div class="ion-page" id="main">-->
-<!--    <ion-header>-->
-<!--      <ion-toolbar>-->
-<!--        <ion-title>Main View</ion-title>-->
-<!--      </ion-toolbar>-->
-<!--    </ion-header>-->
-<!--    <ion-content class="ion-padding"> Main View Content </ion-content>-->
-<!--  </div>-->
-<!--</ion-split-pane>-->
 <ion-app>
   <ion-split-pane contentId="main-content" when="lg">
     <ion-menu contentId="main-content" side="start">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Menu Content</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">This is the menu content.</ion-content>
+      <ion-content class="ion-padding">
+        <ion-list id="inbox-list">
+          <ion-menu-toggle *ngIf="isLoggedIn$ | async" auto-hide="false">
+            <ion-item (click)="logout()" detail="true" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="'log-out-outline'" [md]="'log-out-sharp'"></ion-icon>
+              <ion-label>Deconnexion</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle *ngIf="(isLoggedIn$ | async) && !isMeetingPage" auto-hide="false">
+            <ion-item  [routerLink]="'meeting'" detail="true" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="'log-in-outline'" [md]="'log-in-sharp'"></ion-icon>
+              <ion-label>Reunions</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle *ngIf="(isAdmin$ | async) && !isInscriptionPage" auto-hide="false">
+            <ion-item  [routerLink]="'inscription'" detail="true" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="'add-circle-outline'" [md]="'add-circle-sharp'"></ion-icon>
+              <ion-label>Ajouter un utilisateur</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle *ngIf="(isLoggedIn$ | async) && !isLoginPage" auto-hide="false">
+            <ion-item [routerLink]="'connexion'" detail="true" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="'videocam-outline'" [md]="'videocam-sharp'"></ion-icon>
+              <ion-label>Connexion</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item detail="true" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [ios]="'code-slash-outline'" [md]="'code-slash-sharp'"></ion-icon>
+              <ion-label>Version 1.0.0</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+
+        </ion-list>
+      </ion-content>
     </ion-menu>
     <div class="ion-page" id="main-content">
       <ion-header>
@@ -107,10 +44,12 @@
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
-          <ion-title>Page Title</ion-title>
+          <ion-title></ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding"> Tap the button in the toolbar to open the menu. </ion-content>
+      <ion-content class="ion-padding">
+        <ion-router-outlet id="main-content"></ion-router-outlet>
+      </ion-content>
     </div>
   </ion-split-pane>
 </ion-app>

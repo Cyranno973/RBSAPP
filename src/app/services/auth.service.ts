@@ -1,17 +1,20 @@
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { Credentials } from "../models/credentials";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { BehaviorSubject, catchError, map, Observable, of } from "rxjs";
+import {Injectable} from '@angular/core';
+import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {Credentials} from "../models/credentials";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {BehaviorSubject, catchError, map, Observable, of} from "rxjs";
 import firebase from "firebase/compat";
+import {Router} from "@angular/router";
+import {User as UserData} from '../models/user';
+import {environment} from "../../environments/environment";
 import User = firebase.User;
-import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private currentUser = new BehaviorSubject<User | null>(null);
+  private currentUserData = new BehaviorSubject<UserData | null>(null);
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -19,13 +22,43 @@ export class AuthService {
     private router: Router
   ) {
     this.afAuth.authState.subscribe(user => {
-      this.currentUser.next(user); // Met à jour currentUser avec l'utilisateur actuel ou null
+      this.currentUser.next(user);
+      console.log(user, ' authservice');// Met à jour currentUser avec l'utilisateur actuel ou null
+      if (user) {
+        this.fetchUserData(user.uid);
+      } else {
+        this.currentUserData.next(null); // Réinitialiser les données de l'utilisateur s'il se déconnecte
+      }
     });
+  }
+
+  private fetchUserData(uid: string): void {
+    this.firestore.doc<UserData>(`users/${uid}`).valueChanges().subscribe({
+      next: userData => {
+        if (userData) {
+          this.currentUserData.next(userData);
+          if (!userData.roles.includes('admin')) {
+            this.router.navigate(['/connexion']); // Rediriger si pas admin
+          }
+        } else {
+          this.currentUserData.next(null); // Définir les données utilisateur à null si non trouvées
+          this.router.navigate(['/connexion']); // Rediriger vers une route par défaut si aucune donnée utilisateur
+        }
+      },
+      error: error => {
+        console.error('Error fetching user data:', error);
+        this.currentUserData.next(null); // Gérer l'erreur en réinitialisant les données utilisateur
+      }
+    })
   }
 
 
   getCurrentUser(): Observable<User | null> {
     return this.currentUser.asObservable();
+  }
+
+  getCurrentUserData(): Observable<UserData | null> {
+    return this.currentUserData.asObservable();
   }
 
   async signUp(credentials: Credentials, defaultRole = 'user') {
@@ -63,8 +96,10 @@ export class AuthService {
   }
 
   redirectToExternalAuth(uid: string) {
-    const proxyUrl = `http://localhost:3000/api/auth/authenticate/${uid}`;
-    window.location.href = proxyUrl;
+     // const proxyUrl = `${environment.apiUrl}/auth/authenticate/${uid}`;
+    // const proxyUrl = `http://localhost:3000/api/auth/authenticate/${uid}`;
+    // const proxyUrl = `http://rbs.gsteve.fr/api/auth/authenticate/${uid}`;
+    window.location.href = `${environment.apiUrl}/auth/authenticate/${uid}`;
   }
 
   async sendPasswordResetEmail(email: string): Promise<void> {
