@@ -11,12 +11,15 @@ import {Router} from "@angular/router";
 })
 export class LoginPage implements OnInit {
 
-formLogin!: FormGroup;
-formEmailOublier!: FormGroup;
+  formLogin!: FormGroup;
+  formEmailOublier!: FormGroup;
   afficherFormReset: boolean = false;
-errorMessage: string = '';
+  errorMessage: string = '';
   userEmail: string = '';
-  constructor(private fb: FormBuilder, private userService: UserService, private auth: AuthService, private router: Router) { }
+
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+  }
+
   ngOnInit() {
     this.formLogin = this.fb.group({
       email: ['azaz@hotmail.com', Validators.required],
@@ -28,15 +31,17 @@ errorMessage: string = '';
   }
 
   onLogin(form: FormGroup) {
-    if(this.formLogin.invalid){return}
+    if (this.formLogin.invalid) {
+      return
+    }
 
     // console.log('Login data:', this.formLogin.value);
     this.auth.signIn(this.formLogin.value)
       .then(v => {
-      console.log('vv ',v);
-      this.router.navigate(['meeting']).then()
-      this.errorMessage = '';
-    }).catch((error: any) => {
+        // console.log('vv ', v);
+        // this.router.navigate(['meeting']).then()
+        this.errorMessage = '';
+      }).catch((error: any) => {
 
       // Utilisation de l'erreur retournée par Firebase pour définir un message personnalisé
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {

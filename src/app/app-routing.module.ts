@@ -10,11 +10,7 @@ export const routes: Routes = [
   {path: '',  redirectTo: 'connexion', pathMatch: "full", title: 'connexion'},
   {path: 'connexion', component: LoginPage,  canActivate: [LoginGuard],title: 'connexion'},
   {path: 'inscription', component: SignUpPage,  title: 'test5' , canActivate:  [canActivateAdmin] },
-  // {path: 'inscription', component: SignUpPage},
-  // {
-  //   path: 'sign-up',
-  //   loadChildren: () => import('./sign-up/sign-up.module').then( m => m.SignUpPageModule)
-  // },
+
   {
     path: 'meeting',
     canActivate: [canActivateAuth],

@@ -2,12 +2,13 @@ import {Injectable} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {Credentials} from "../models/credentials";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
-import {BehaviorSubject, catchError, map, Observable, of} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, of, take} from "rxjs";
 import firebase from "firebase/compat";
 import {Router} from "@angular/router";
 import {User as UserData} from '../models/user';
 import {environment} from "../../environments/environment";
 import User = firebase.User;
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class AuthService {
   ) {
     this.afAuth.authState.subscribe(user => {
       this.currentUser.next(user);
-      console.log(user, ' authservice');// Met à jour currentUser avec l'utilisateur actuel ou null
+      // console.log(user, ' authservice');// Met à jour currentUser avec l'utilisateur actuel ou null
       if (user) {
         this.fetchUserData(user.uid);
       } else {
@@ -75,11 +76,11 @@ export class AuthService {
     const credential = await this.afAuth.signInWithEmailAndPassword(credentials.email, credentials.password);
     const uid = credential.user?.uid;
     if (uid) {
-      this.getTokenForUser(uid).subscribe(token => {
-        if (!token) {
+      this.getTokenForUser(uid).pipe((take(1))).subscribe(token => {
+        // if (!token) {
           // Si aucun token, redirigez vers l'authentification externe
           this.redirectToExternalAuth(uid);
-        }
+        // }
         // Sinon, continuez avec le flux normal d'authentification
       });
     }
@@ -99,6 +100,7 @@ export class AuthService {
      // const proxyUrl = `${environment.apiUrl}/auth/authenticate/${uid}`;
     // const proxyUrl = `http://localhost:3000/api/auth/authenticate/${uid}`;
     // const proxyUrl = `http://rbs.gsteve.fr/api/auth/authenticate/${uid}`;
+    // return this.http.get(`${environment.apiUrl}/auth/authenticate/${uid}`)
     window.location.href = `${environment.apiUrl}/auth/authenticate/${uid}`;
   }
 
@@ -108,6 +110,6 @@ export class AuthService {
 
   async signOut() {
     await this.afAuth.signOut();
-    this.router.navigate(['/connexion']).then();
+    // this.router.navigate(['/connexion']).then();
   }
 }

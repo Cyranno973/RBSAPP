@@ -9,7 +9,7 @@ export const canActivateAuth: (route: ActivatedRouteSnapshot, state: RouterState
 
   return afAuth.authState.pipe(
     map(user => {
-      console.log(user);
+      // console.log(user);
       return (!!user)
     }),
     tap(isLoggedIn => {

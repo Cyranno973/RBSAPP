@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthService} from "./services/auth.service";
 import {Event as RouterEvent, NavigationEnd, Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
@@ -9,7 +9,7 @@ import {map, Observable} from "rxjs";
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   isLoggedIn$: Observable<boolean>;
   isAdmin$: Observable<boolean>;
   isMeetingPage: boolean = false;
@@ -35,9 +35,6 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.authService.signOut();
-  }
-  ngOnInit(): void {
-
+    this.authService.signOut().then();
   }
 }

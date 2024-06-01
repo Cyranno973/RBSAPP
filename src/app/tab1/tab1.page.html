@@ -9,7 +9,6 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-<!--      <ion-button slot="end">Retour</ion-button>-->
       <ion-title size="large">Télégarger les vidéos de vos reunions</ion-title>
     </ion-toolbar>
   </ion-header>
@@ -22,7 +21,7 @@
     <ion-datetime prefer-wheel="true"
                   presentation="month-year"
                   style="margin: 0 auto;"
-                  #datetime
+
                   [showDefaultTitle]="true"
                   firstDayOfWeek="1"
                   [max]="maxDate"
@@ -30,8 +29,9 @@
       <span slot="title">Sélectionner la date de début</span>
       <ion-buttons slot="buttons">
         <ion-button color="danger" (click)="reset()">Reset</ion-button>
-        <ion-button color="primary" (click)="cancel()">Cancel</ion-button>
+        <ion-button color="primary" (click)="reset()">Cancel</ion-button>
         <ion-button color="primary" (click)="confirm()">Valider</ion-button>
+        <ion-button color="primary" (click)="getmeetingById()">getmeetingById</ion-button>
       </ion-buttons>
     </ion-datetime>
 
@@ -48,9 +48,7 @@
       <ion-grid>
         <ion-row class="row-border" *ngFor="let meeting of meetings">
           <ion-col size="12" size-md="3">
-<!--            <ion-thumbnail slot="start">-->
-              <ion-img style="width: 10%;" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" alt="Silhouette of mountains"/>
-<!--            </ion-thumbnail>-->
+            <ion-img style="width: 10%;" src="../../assets/thumbnail.svg" alt="Silhouette of mountains"/>
           </ion-col>
           <ion-col size="12" size-md="3">
             <ion-label>{{meeting.subject}}</ion-label>

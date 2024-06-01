@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {GoToMeetingService} from "../services/go-to-meeting.service";
-import {ActivatedRoute} from "@angular/router";
 import {Meeting, SearchHistory} from "../models/meeting";
 import {map} from "rxjs";
 import {IonDatetime, LoadingController} from "@ionic/angular";
@@ -16,34 +15,21 @@ import User = firebase.User;
 export class Tab1Page implements OnInit {
   meetings!: Meeting[];
   startDate!: string;
-  endDate!: string;
-  showDate = false;
-  showEndDate = false;
   auth: boolean = false;
   @ViewChild(IonDatetime, {static: false}) datetimeEl!: IonDatetime;
   maxDate: string = new Date().toISOString().split('T')[0];
-  selectedDate: any;
-  selecting: 'start' | 'end' = 'start';
   searchHistory: SearchHistory = {};
-  id: string = '7972725270140104878';
   user!: User | null;
 
-  constructor(private goToMeetingService: GoToMeetingService, private router: ActivatedRoute,
-              private authService: AuthService, public loadingController: LoadingController,
-    private route: ActivatedRoute
-              ) {
-  }
+  constructor(private goToMeetingService: GoToMeetingService, private authService: AuthService, public loadingController: LoadingController) {}
 
   download() {
     if (!this.user) {
       return
     }
-
   }
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.data['title']);
-
     // Vérifiez si l'utilisateur est connecté et récupérez le token d'accès externe si présent
     this.authService.getCurrentUser().subscribe(user => {
       if (user) this.user = user;
@@ -51,7 +37,13 @@ export class Tab1Page implements OnInit {
   }
 
   record(downloadUrl: string) {
-    window.open(downloadUrl, '_blank');
+    // window.open(downloadUrl, '_blank');
+    this.goToMeetingService.uploadFromGoToMeeting(
+      "https://cdn.recordingassets.logmeininc.com/8251427265828452588/7972725270140104878/f6199dc6-8545-44b0-ac77-12d366d94131/recording/6208747987644228360/transcode/6208747987644228360.mp4?Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLnJlY29yZGluZ2Fzc2V0cy5sb2dtZWluaW5jLmNvbS84MjUxNDI3MjY1ODI4NDUyNTg4Lzc5NzI3MjUyNzAxNDAxMDQ4NzgvZjYxOTlkYzYtODU0NS00NGIwLWFjNzctMTJkMzY2ZDk0MTMxLyoiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3MTU4NDM4NjB9fX1dfQ__&Signature=jVVtVTDt0PlE3kPc~Or6CTm4S0tWYnwWTzgDbShJ8l2jA9VoMEnulHHQBehmRLBDZIAhVCjDVVuF4ywIVDHG0cJrjZvk2JhkNBBVNr7vqsaZpC7BkyAGx1zndRB6WXiK7f3COZS~3p73ElfIwuJbR-Pkf8piQQJVm1n1eb323meZ3M27sAX0c2QrjhUIckkPL6le9rL0mBpc9WqCeQEYuDbg~pS1EsQc~hcIsjud4hDkCf7Fp9~KO-wfhpgj6cEG4qwxwALQOSmMXq6MoQuJScY45iubj7VR02EN6mI5Yjcad8IdFhPh82jhJ0ZOcYaslbg3JJSeMAFre-NU3goceQ__&Key-Pair-Id=APKAI2Z3PWL3BWDDZ5IA&response-content-disposition=attachment",
+      "video de test",
+      "ceci est unevideo du moi de mai",
+      "paque",
+      "22").subscribe(c =>  console.log(c))
   }
 
   async confirm() {
@@ -60,7 +52,6 @@ export class Tab1Page implements OnInit {
     }).then((response) => {
       response.present();
     });
-    console.log(confirm);
     await this.datetimeEl.confirm();
     if (!this.datetimeEl.value || !this.user) {
       return;
@@ -73,9 +64,7 @@ export class Tab1Page implements OnInit {
 
     // Utiliser la date ajustée
     this.searchHistory.startDate = adjustedDate.toISOString(); // Convertir en format ISO string
-    this.searchHistory.id = this.id;
 
-    console.log(this.searchHistory.startDate);
     this.goToMeetingService.getHistoricalMeetings(this.searchHistory, this.user?.uid)
       .pipe(
         map(meetings => meetings.filter(meeting => meeting.recording)),
@@ -86,7 +75,6 @@ export class Tab1Page implements OnInit {
         })))
       )
       .subscribe(meetings => {
-        console.log(meetings);
         // Assurez-vous que meetings est correctement typé pour accepter startTime comme une chaîne
         this.meetings = meetings;
         this.loadingController.dismiss().then((response) => {
@@ -102,20 +90,15 @@ export class Tab1Page implements OnInit {
     return dateStr.replace(/\.\+0000$/, 'Z');
   }
 
-  cancel() {
-    this.showDate = false;
-  }
-
   reset() {
-    this.datetimeEl.reset().then(() => this.showDate = false);
+    this.datetimeEl.reset().then();
   }
 
   getmeetingById() {
     if (!this.user) {
       return
     }
-    // this.goToMeetingService.getMeeting('144418421').subscribe(v => console.log(v))
-    this.goToMeetingService.getMeeting(this.user?.uid, '547203517').subscribe(v => console.log(v))
+    this.goToMeetingService.getMeeting(this.user?.uid).subscribe(v => console.log(v))
   }
 
   getMe() {
@@ -132,14 +115,7 @@ export class Tab1Page implements OnInit {
     this.goToMeetingService.getUserInfo(this.user?.uid).subscribe(v => console.log(v))
   }
 
-  dateChanged(event: any) {
-    const selectedDate = event.detail.value;
-    if (this.selecting === 'start') {
-      this.startDate = selectedDate;
-      console.log('Date de début sélectionnée:', this.startDate);
-    } else {
-      this.endDate = selectedDate;
-      console.log('Date de fin sélectionnée:', this.endDate);
-    }
+  cancel() {
+
   }
 }

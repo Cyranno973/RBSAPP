@@ -17,14 +17,27 @@ export class GoToMeetingService {
     console.log(search);
     return this.http.post<Meeting[]>(`${environment.apiUrl}/meetings/historicalMeetings`, {search, uid})
   }
+  uploadFromGoToMeeting(videoUrl: string, title: string, description: string, tags: string, categoryId: string): Observable<any> {
+    const payload = {
+      videoUrl,
+      title,
+      description,
+      tags,
+      categoryId
+    };
+    return this.http.post<any>(`${environment.apiUrl}/youtube/uploadFromGoToMeeting`, payload);
+  }
+  uploadVideo(urlVideo: string): any {
+    return this.http.get<Meeting[]>(`${environment.apiUrl}/youtube/historicalMeetings`)
+  }
   getMeetingByOrganizer(search: SearchHistory, uid: string): Observable<Meeting[]> {
     console.log(search);
     console.log(uid);
     return this.http.post<Meeting[]>(`${environment.apiUrl}/meetings/meetingByOrganizer`, {search, uid})
   }
 
-  getMeeting(uid: string, id: string): Observable<Meeting> {
-    return this.http.get<Meeting>(`${environment.apiUrl}/meetings/meeting/${id}?uid=${uid}`);
+  getMeeting(uid: string): Observable<Meeting> {
+    return this.http.get<Meeting>(`${environment.apiUrl}/meetings/meeting/?uid=${uid}`);
   }
 
   getMe(uid: string): Observable<Meeting> {
